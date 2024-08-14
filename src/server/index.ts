@@ -10,6 +10,7 @@ import type { Bot } from '#root/bot/index.js'
 import { requestLogger } from '#root/server/middlewares/request-logger.js'
 import type { Logger } from '#root/logger.js'
 import type { Config } from '#root/config.js'
+import { number } from 'valibot'
 
 interface Dependencies {
   bot: Bot
@@ -71,7 +72,7 @@ export function createServer(dependencies: Dependencies) {
 
 export type Server = Awaited<ReturnType<typeof createServer>>
 
-export function createServerManager(server: Server, options: { host: string, port: number }) {
+export function createServerManager(server: Server, options: { host: string, port: any }) {
   let handle: undefined | ReturnType<typeof serve>
   return {
     start() {
