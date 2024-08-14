@@ -80,7 +80,7 @@ export function createServerManager(server: Server, options: { host: string, por
         handle = serve(
           {
             fetch: server.fetch,
-            hostname: options.host,
+            hostname:process.env.SERVER_HOST || options.host,
             port: process.env.SERVER_PORT ||  options.port,
           },
           info => resolve({
