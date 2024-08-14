@@ -1,3 +1,5 @@
+#!/usr/bin/env tsx
+
 import process from 'node:process'
 import { ValiError, flatten } from 'valibot'
 import { type RunnerHandle, run } from '@grammyjs/runner'
@@ -6,7 +8,9 @@ import { createBot } from '#root/bot/index.js'
 import type { PollingConfig, WebhookConfig } from '#root/config.js'
 import { createConfig } from '#root/config.js'
 import { createServer, createServerManager } from '#root/server/index.js'
-import express from 'express'
+
+
+
 
 async function startPolling(config: PollingConfig) {
   const logger = createLogger(config)
@@ -15,16 +19,6 @@ async function startPolling(config: PollingConfig) {
     logger,
   })
   let runner: undefined | RunnerHandle
-
-  // Set up express app to keep the process alive
-  const app = express()
-  const PORT = process.env.PORT || 3000
-  app.get('/', (req, res) => {
-    res.send('Bot is running in polling mode')
-  })
-  app.listen(PORT, () => {
-    logger.info(`Express server is running on port ${PORT}`)
-  })
 
   // graceful shutdown
   onShutdown(async () => {
@@ -44,7 +38,7 @@ async function startPolling(config: PollingConfig) {
   })
 
   logger.info({
-    msg: 'Bot running in polling mode...',
+    msg: 'Bot running...',
     username: bot.botInfo.username,
   })
 }
@@ -60,10 +54,9 @@ async function startWebhook(config: WebhookConfig) {
     config,
     logger,
   })
-  const PORT = process.env.PORT || config.serverPort
   const serverManager = createServerManager(server, {
-    host: process.env.SERVER_HOST || config.serverHost,
-    port: PORT,
+    host:process.env.SERVER_HOST || config.serverHost,
+    port: process.env.SERVER_PORT || config.serverPort,
   })
 
   // graceful shutdown
@@ -155,3 +148,5 @@ function convertKeysToCamelCase<T>(obj: T): KeysToCamelCase<T> {
   }
   return result
 }
+
+
