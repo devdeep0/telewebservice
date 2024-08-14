@@ -19,10 +19,13 @@ async function startPolling(config: PollingConfig) {
   const server = express();
   const port = parseInt(process.env.PORT || '3000', 10);
 
+  server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
   server.get('/', (req, res) => {
     res.send('Hello from Express!');
   });
-  
+
   let runner: undefined | RunnerHandle
 
   // graceful shutdown
