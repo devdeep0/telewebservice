@@ -31,7 +31,7 @@ const configSchema = v.variant('botMode', [
       botWebhook: v.pipe(v.string(), v.url()),
       botWebhookSecret: v.pipe(v.string(), v.minLength(12)),
       serverHost: v.optional(v.string(), '0.0.0.0'),
-      serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), '3000'),
+      serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), '80'),
     }),
     v.transform(input => ({
       ...input,
