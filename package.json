@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "imports": {
-    "#root/*": "./build/src/*"
+    "#root/": "./build/src/"
   },
   "license": "MIT",
   "engines": {
@@ -17,7 +17,7 @@
     "typecheck": "tsc",
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
-    "start": "node --experimental-specifier-resolution=node --experimental-modules ./build/src/main.js",
+    "start": "tsc && tsx ./src/main.ts",
     "start:force": "tsx ./src/main.ts"
   },
   "dependencies": {
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@types/node": "20.14.11",
     "eslint": "8.57.0",
-    "lint-staged": "15.2.0",
+    "lint-staged": "15.2.7",
     "tsc-watch": "6.2.0",
     "typescript": "5.5.3"
   },
