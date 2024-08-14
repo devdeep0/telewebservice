@@ -4,11 +4,10 @@ import process from 'node:process'
 import { ValiError, flatten } from 'valibot'
 import { type RunnerHandle, run } from '@grammyjs/runner'
 import { createLogger } from './logger.js'
-import { createBot } from './bot/index.js'
-import type { PollingConfig, WebhookConfig } from './config.js'
-import { createConfig } from './config.js'
-import { createServer } from './server.js'
-import type { Context } from './bot/context.js' // Make sure this import path is correct
+import { createBot } from '#root/bot/index.js'
+import type { PollingConfig, WebhookConfig } from '#root/config.js'
+import { createConfig } from '#root/config.js'
+import { createServer, createServerManager } from '#root/server/index.js'
 
 async function startPolling(config: PollingConfig) {
   const logger = createLogger(config)
@@ -17,15 +16,6 @@ async function startPolling(config: PollingConfig) {
     logger,
   })
   let runner: undefined | RunnerHandle
-
-  const PORT = process.env.PORT || 3000
-
-  // Set up express server to keep the process alive
-  await createServer<Context>({
-    bot,
-    logger,
-    port: Number(PORT),
-  })
 
   // graceful shutdown
   onShutdown(async () => {
@@ -45,7 +35,7 @@ async function startPolling(config: PollingConfig) {
   })
 
   logger.info({
-    msg: 'Bot running in polling mode...',
+    msg: 'Bot running...',
     username: bot.botInfo.username,
   })
 }
@@ -56,18 +46,30 @@ async function startWebhook(config: WebhookConfig) {
     config,
     logger,
   })
+  const server = createServer({
+    bot,
+    config,
+    logger,
+  })
+  const serverManager = createServerManager(server, {
+    host: config.serverHost,
+    port: config.serverPort,
+  })
 
-  const PORT = process.env.PORT || config.serverPort
+  // graceful shutdown
+  onShutdown(async () => {
+    logger.info('Shutdown')
+    await serverManager.stop()
+  })
 
   // to prevent receiving updates before the bot is ready
   await bot.init()
 
   // start server
-  await createServer<Context>({
-    bot,
-    logger,
-    port: Number(PORT),
-    webhookPath: new URL(config.botWebhook).pathname,
+  const info = await serverManager.start()
+  logger.info({
+    msg: 'Server started',
+    url: info.url,
   })
 
   // set webhook
@@ -81,34 +83,30 @@ async function startWebhook(config: WebhookConfig) {
   })
 }
 
-async function main() {
+try {
   try {
-    try {
-      process.loadEnvFile()
-    }
-    catch {
-      // No .env file found
-    }
-
-    // @ts-expect-error create config from environment variables
-    const config = createConfig(convertKeysToCamelCase(process.env))
-
-    if (config.isWebhookMode)
-      await startWebhook(config)
-    else if (config.isPollingMode)
-      await startPolling(config)
-    else
-      throw new Error('Invalid mode. Set either IS_WEBHOOK_MODE or IS_POLLING_MODE to true.')
+    process.loadEnvFile()
   }
-  catch (error) {
-    if (error instanceof ValiError) {
-      console.error('Config parsing error', flatten(error.issues))
-    }
-    else {
-      console.error('Unexpected error:', error)
-    }
-    process.exit(1)
+  catch {
+    // No .env file found
   }
+
+  // @ts-expect-error create config from environment variables
+  const config = createConfig(convertKeysToCamelCase(process.env))
+
+  if (config.isWebhookMode)
+    await startWebhook(config)
+  else if (config.isPollingMode)
+    await startPolling(config)
+}
+catch (error) {
+  if (error instanceof ValiError) {
+    console.error('Config parsing error', flatten(error.issues))
+  }
+  else {
+    console.error(error)
+  }
+  process.exit(1)
 }
 
 // Utils
@@ -147,9 +145,3 @@ function convertKeysToCamelCase<T>(obj: T): KeysToCamelCase<T> {
   }
   return result
 }
-
-// Run the main function
-main().catch((error) => {
-  console.error('Unhandled error in main:', error)
-  process.exit(1)
-})
