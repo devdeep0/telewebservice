@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-
+import express from 'express';
 import process from 'node:process'
 import { ValiError, flatten } from 'valibot'
 import { type RunnerHandle, run } from '@grammyjs/runner'
@@ -15,6 +15,14 @@ async function startPolling(config: PollingConfig) {
     config,
     logger,
   })
+
+  const server = express();
+  const port = parseInt(process.env.PORT || '3000', 10);
+
+  server.get('/', (req, res) => {
+    res.send('Hello from Express!');
+  });
+  
   let runner: undefined | RunnerHandle
 
   // graceful shutdown
