@@ -33,7 +33,7 @@ const configSchema = v.variant('botMode', [
       // serverHost: v.optional(v.string(), '0.0.0.0'),
       // serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), '80'),
       serverHost: v.optional(v.string(), process.env.SERVER_HOST || '0.0.0.0'),
-      serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), process.env.SERVER_PORT || '80'),
+      serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), process.env.SERVER_PORT || '5000'),
     }),
     v.transform(input => ({
       ...input,
