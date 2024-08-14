@@ -81,7 +81,7 @@ export function createServerManager(server: Server, options: { host: string, por
           {
             fetch: server.fetch,
             hostname: options.host,
-            port: options.port,
+            port: process.env.SERVER_PORT ||  options.port,
           },
           info => resolve({
             url: info.family === 'IPv6'

@@ -56,7 +56,7 @@ async function startWebhook(config: WebhookConfig) {
   })
   const serverManager = createServerManager(server, {
     host: config.serverHost,
-    port: process.env.PORT || config.serverPort,
+    port: process.env.SERVER_PORT || config.serverPort,
   })
 
   // graceful shutdown
