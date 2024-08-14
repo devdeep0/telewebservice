@@ -55,7 +55,7 @@ async function startWebhook(config: WebhookConfig) {
     logger,
   })
   const serverManager = createServerManager(server, {
-    host: config.serverHost,
+    host:process.env.SERVER_HOST || config.serverHost,
     port: process.env.SERVER_PORT || config.serverPort,
   })
 
