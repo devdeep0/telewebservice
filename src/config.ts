@@ -51,3 +51,4 @@ export type WebhookConfig = v.InferOutput<typeof configSchema['options'][1]>
 export function createConfig(input: v.InferInput<typeof configSchema>) {
   return v.parse(configSchema, input)
 }
+

@@ -9,6 +9,9 @@ import type { PollingConfig, WebhookConfig } from '#root/config.js'
 import { createConfig } from '#root/config.js'
 import { createServer, createServerManager } from '#root/server/index.js'
 
+
+
+
 async function startPolling(config: PollingConfig) {
   const logger = createLogger(config)
   const bot = createBot(config.botToken, {
@@ -145,3 +148,5 @@ function convertKeysToCamelCase<T>(obj: T): KeysToCamelCase<T> {
   }
   return result
 }
+
+
