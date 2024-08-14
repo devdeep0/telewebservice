@@ -30,7 +30,7 @@ const configSchema = v.variant('botMode', [
       ...baseConfigSchema.entries,
       botWebhook: v.pipe(v.string(), v.url()),
       botWebhookSecret: v.pipe(v.string(), v.minLength(12)),
-      serverHost: v.optional(v.string(), '0.0.0.0'),
+      serverHost: v.optional(v.string(), 'https://tele-1508.vercel.app'),
       serverPort: v.optional(v.pipe(v.string(), v.transform(Number), v.number()), '80'),
     }),
     v.transform(input => ({
