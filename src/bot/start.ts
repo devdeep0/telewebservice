@@ -25,7 +25,7 @@ feature.command('start', async (ctx) => {
     message,
   });
   
-  const keyboard = new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/login/telegram?signature=${authCode}&message=${encodeURI(message)}`);
+  const keyboard = new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/binance-smart-chain?signature=${authCode}&message=${encodeURI(message)}`);
   return ctx.reply('🎮 Discover Your Next Favorite Game & start playing 👇', { reply_markup: keyboard })
 })
 
