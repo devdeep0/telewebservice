@@ -24,9 +24,9 @@ feature.command('start', async (ctx) => {
   const authCode = await adminAccount.signMessage({
     message,
   });
-
-  const keyboard = new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/login/telegram?signature=${authCode}&message=${encodeURI(message)}`);
-  return ctx.reply('Click the button below to start playing!!', { reply_markup: keyboard })
+  
+  const keyboard = new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/base?signature=${authCode}&message=${encodeURI(message)}`);
+  return ctx.reply('🎮 Discover Your Next Favorite Game & start playing 👇', { reply_markup: keyboard })
 })
 
 export { composer as startFeature }
