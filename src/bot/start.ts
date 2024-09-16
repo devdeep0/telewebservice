@@ -14,7 +14,7 @@ const adminAccount = privateKeyToAccount({
   client: createThirdwebClient({ clientId: process.env.THIRDWEB_CLIENT_ID as string }),
 })
 
-feature.command('start', async (ctx) => {
+feature.command('play', async (ctx) => {
   const username = ctx.from?.username;
   const expiration = Date.now() + 600_000; // valid for 10 minutes
   const message = JSON.stringify({
