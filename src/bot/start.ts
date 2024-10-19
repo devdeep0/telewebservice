@@ -1,20 +1,11 @@
-import { Composer, InlineKeyboard, Context as GrammyContext } from 'grammy'
+import { Composer, InlineKeyboard } from 'grammy'
+import type { Context } from '#root/bot/context.js'
 import { privateKeyToAccount } from 'thirdweb/wallets'
 import { createThirdwebClient } from 'thirdweb'
-import { config } from 'dotenv'
+import { config } from 'dotenv' 
 config()
 
-// Define custom session type
-interface SessionData {
-  welcomed: boolean;
-}
-
-// Extend the Context type to include our custom session
-interface MyContext extends GrammyContext {
-  session: SessionData;
-}
-
-const composer = new Composer<MyContext>()
+const composer = new Composer<Context>()
 
 const feature = composer.chatType('private')
 
@@ -23,8 +14,8 @@ const adminAccount = privateKeyToAccount({
   client: createThirdwebClient({ clientId: process.env.THIRDWEB_CLIENT_ID as string }),
 })
 
-// Function to generate auth code and keyboard
-async function generateAuthCodeAndKeyboard(username: string | undefined) {
+feature.command('start', async (ctx) => {
+  const username = ctx.from?.username;
   const expiration = Date.now() + 600_000; // valid for 10 minutes
   const message = JSON.stringify({
     username,
@@ -34,27 +25,8 @@ async function generateAuthCodeAndKeyboard(username: string | undefined) {
     message,
   });
   
-  return new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/login/telegram?signature=${authCode}&message=${encodeURI(message)}`);
-}
-
-// Initial message when bot is started
-feature.use(async (ctx, next) => {
-  if (ctx.chat?.type === 'private' && !ctx.session.welcomed) {
-    await ctx.replyWithPhoto('https://rupturelabs.vercel.app/_next/image?url=%2Flogo%2FBlackRL.png&w=96&q=75', {
-      caption: '👋 Welcome to our gaming bot! Use /start to begin your gaming adventure!',
-    });
-    ctx.session.welcomed = true;
-  }
-  await next();
-});
-
-// Existing /start command
-feature.command('start', async (ctx) => {
-  const keyboard = await generateAuthCodeAndKeyboard(ctx.from?.username);
-  return ctx.reply('🎮 Discover Your Next Favorite Game & start playing 👇', { reply_markup: keyboard });
-});
+  const keyboard = new InlineKeyboard().webApp('Play 🎮', `${process.env.FRONTEND_APP_ORIGIN}/login/telegram?signature=${authCode}&message=${encodeURI(message)}`);
+  return ctx.reply('🎮 Discover Your Next Favorite Game & start playing 👇', { reply_markup: keyboard })
+})
 
 export { composer as startFeature }
-
-// Export the SessionData type for use in the main bot file
-export type { SessionData }
