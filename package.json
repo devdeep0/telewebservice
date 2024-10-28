@@ -9,21 +9,16 @@
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0",
-   
     "pnpm": ">=9.7.0"
   },
-
   "scripts": {
     "lint": "eslint .",
     "format": "eslint . --fix",
     "typecheck": "tsc",
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
-    "start": "tsx ./src/main.ts",
-    "heroku-postbuild": "pnpm install typescript && tsc",
-    "start:force": "tsx ./src/main.ts",
-    "postinstall": "pnpm run build",        
-    "start:prod": "node dist/main.js"
+    "start": "tsc && tsx ./src/main.ts",
+    "start:force": "tsx ./src/main.ts"
   },
   "dependencies": {
     "@grammyjs/auto-chat-action": "0.1.1",
@@ -58,6 +53,4 @@
   "lint-staged": {
     "*.ts": "eslint"
   }
-
-  
 }
