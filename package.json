@@ -11,6 +11,7 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
+  "packageManager": "pnpm@9.7.0",
   "scripts": {
     "lint": "eslint .",
     "format": "eslint . --fix",
