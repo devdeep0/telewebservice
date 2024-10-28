@@ -19,7 +19,8 @@
     "typecheck": "tsc",
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
-    "start": "tsc && tsx ./src/main.ts",
+    "start": "tsx ./src/main.ts",
+    "heroku-postbuild": "npm install typescript && tsc",
     "start:force": "tsx ./src/main.ts",
     "postinstall": "pnpm run build",        
     "start:prod": "node dist/main.js"
