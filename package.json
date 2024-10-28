@@ -20,7 +20,9 @@
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
     "start": "tsc && tsx ./src/main.ts",
-    "start:force": "tsx ./src/main.ts"
+    "start:force": "tsx ./src/main.ts",
+    "postinstall": "pnpm run build",        
+    "start:prod": "node dist/main.js"
   },
   "dependencies": {
     "@grammyjs/auto-chat-action": "0.1.1",
