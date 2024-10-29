@@ -17,8 +17,9 @@
     "typecheck": "tsc",
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
-    "start": "tsc && tsx ./src/main.ts",
+    "start":"node dist/main.js",
     "start:force": "tsx ./src/main.ts"
+   
   },
   "dependencies": {
     "@grammyjs/auto-chat-action": "0.1.1",
