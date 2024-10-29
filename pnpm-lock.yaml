@@ -68,7 +68,7 @@ importers:
       valibot:
         specifier: 0.36.0
         version: 0.36.0
-       '@types/express':
+      '@types/express':
         specifier: ^4.17.21
         version: 4.17.21
       '@types/node':
