@@ -17,9 +17,8 @@
     "typecheck": "tsc",
     "build": "tsc --noEmit false",
     "dev": "tsc-watch --onSuccess \"tsx ./src/main.ts\"",
-    "start":"node dist/main.js",
+    "start": "tsc && tsx ./src/main.ts",
     "start:force": "tsx ./src/main.ts"
-   
   },
   "dependencies": {
     "@grammyjs/auto-chat-action": "0.1.1",
@@ -41,13 +40,7 @@
     "pino-pretty": "11.2.1",
     "thirdweb": "^5.43.2",
     "tsx": "4.16.2",
-    "valibot": "0.36.0",
-    "@types/express": "^4.17.21",
-    "@types/node": "20.14.11",
-    "eslint": "8.57.0",
-    "lint-staged": "15.2.7",
-    "tsc-watch": "6.2.0",
-    "typescript": "5.5.3"
+    "valibot": "0.36.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
