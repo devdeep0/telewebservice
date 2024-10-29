@@ -10,8 +10,8 @@
       ]
     },
     "strict": true,
-    "noEmit": false,
-    "outDir": "dist",
+    "noEmit": true,
+    "outDir": "build",
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
